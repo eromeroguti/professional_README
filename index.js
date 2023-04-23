@@ -1,10 +1,14 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer');
 const fs = require('fs');
-const readmeData = "This is my README file";
+const generateMarkdown = require('./utils/generateMarkdown');
+const readmeData = ("This is my README file");
+const {InputQuestion} = require("../Develop/utils/Question")
 
 // TODO: Create an array of questions for user input
-const questions = inquirer.prompt([
+const askQuestions = () => { inquirer.prompt([
+    new InputQuestion("test","How do you test your app?"),
+    // new ListQuestion("license", "WHat whill your license be", ["No Licence", "MIT"]),
     {
         name: 'name',
         type: 'input',
@@ -12,19 +16,50 @@ const questions = inquirer.prompt([
 
     },
     {
+        name: 'description',
+        message: 'Please describe your project',
+        type: 'input'
+    },
+    {
         name: 'github',
         message: 'What is your Github username?',
         type: 'input'
+    },
+    {
+        name: ' installation',
+        message: 'How should this application be installed',
+        type: 'input'
+        
     },
     {
         name: 'email',
         message: 'What is your email?',
         type: 'input'
     },
-
+    {
+        name: 'title',
+        message: 'What is your title?',
+        type: 'input'
+    },
+    {
+        name: 'usage',
+        message: 'Primary use of this application',
+        type: 'input'
+    },
+    {
+        name: 'credits',
+        message: 'Acknowledge who contributed to this project',
+        type: 'input'
+    },
+   
 ]).then((response) => {
     console.log(response);
-    fs.writeFile(`${response.name}.json`, JSON.stringify(response, null, 2), (err) => {
+
+    //response is an object
+    var template = generateMarkdown(response)
+
+    //
+    fs.writeFile(`README.md`,template, (err) => {
         if (err) {
         console.log(err);
         return;
@@ -33,21 +68,12 @@ const questions = inquirer.prompt([
         }   
       );
     });
-
-
-// TODO: Create a function to write README file
-function writeReadmeFile(filename, data) {
-    fs.writeFile(filename, data, (err) => {
-        if(err) {
-            console.error(err);
-            return;
-        }
-        console.log(`README file ${filename} has been generated!`);
-    });
 }
 
+askQuestions()
+
 // TODO: Create a function to initialize app
-// function init() {}
+function init() {}
 
 // Function call to initialize app
-// init();
+init();
